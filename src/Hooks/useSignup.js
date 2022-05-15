@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { auth ,storage } from "../Firebase/config";
+import { auth ,storage,db } from "../Firebase/config";
 
 import { useAuthContext } from "./useAuthContext";
 
@@ -32,6 +32,12 @@ export const useSignup = () => {
 
       await response.user.updateProfile({ displayName,photoURL:imageUrl });
 
+      // create profile documnent
+      await db.collection("profile").doc(response.user.uid).set({
+        online:true,
+        displayName,
+        photoURL:imageUrl
+      })
       //dispatch login action
       dispatch({ type: "LOG_IN", payload: response.user });
       if (!isCancled) {
