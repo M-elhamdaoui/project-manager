@@ -31,6 +31,7 @@ function Navbar() {
                 Logout
               </button>
             )}
+            {error && console.log(error)}
           </li>
         </ul>
       </div>

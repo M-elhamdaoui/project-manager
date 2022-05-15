@@ -18,8 +18,8 @@ export const useLogout = () => {
       await auth.signOut();
       dispatch({ type: "LOG_OUT" });
       if (!isCancled) {
-        setError(null);
         setIsPending(false);
+        setError(null);
       }
     } catch (err) {
       if (!isCancled) {
@@ -31,6 +31,6 @@ export const useLogout = () => {
   };
   useEffect(() => {
     return () => setIsCancled(true);
-  });
+  },[]);
   return { isPending, error, logout };
 };
