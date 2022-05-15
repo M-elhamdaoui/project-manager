@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { auth } from "../Firebase/config";
+import { auth ,storage } from "../Firebase/config";
+
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
@@ -8,7 +9,7 @@ export const useSignup = () => {
   const [isPending, setIsPending] = useState(false);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email, password, displayName) => {
+  const signup = async (email, password, displayName,image) => {
     setError(null);
     setIsPending(true);
     try {
@@ -21,10 +22,15 @@ export const useSignup = () => {
       if (!response) {
         throw new Error("could not complite signup");
       }
+      //store the pic
+
+      const path=`pictures/${response.user.uid}/${image.name}`
+      const img=await storage.ref(path).put(image);
+      const imageUrl=await img.ref.getDownloadURL();
 
       //add display name to the user
 
-      await response.user.updateProfile({ displayName });
+      await response.user.updateProfile({ displayName,photoURL:imageUrl });
 
       //dispatch login action
       dispatch({ type: "LOG_IN", payload: response.user });
