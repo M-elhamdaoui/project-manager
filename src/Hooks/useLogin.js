@@ -1,8 +1,8 @@
 import { useState,useEffect } from "react";
-import { auth } from "../Firebase/config";
+import { auth, db } from "../Firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
-const useLogin=()=>{
+export const useLogin=()=>{
     const {dispatch}=useAuthContext()
     const [isCancled,setIsCancled]=useState(false)
     const [error,setError]=useState(null)
@@ -15,6 +15,7 @@ const useLogin=()=>{
         try {
                 const res =await auth.signInWithEmailAndPassword(email,password)
                 dispatch({ type: "LOG_IN", payload: res.user });
+                db.collection("profile").doc(res.user.uid).update({online:true})
                 if(!isCancled){
                     setIsPending(false)
                     setError(null);
@@ -30,8 +31,10 @@ const useLogin=()=>{
     }
 
     useEffect(()=>{
+
         return ()=>setIsCancled(true)
-    })
+    },[])
+
 
     return {isPending,error,login}
 }
