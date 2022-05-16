@@ -15,7 +15,7 @@ export const useLogin=()=>{
         try {
                 const res =await auth.signInWithEmailAndPassword(email,password)
                 dispatch({ type: "LOG_IN", payload: res.user });
-                db.collection("profile").doc(res.user.uid).update({online:true})
+                await db.collection("profile").doc(res.user.uid).update({online:true})
                 if(!isCancled){
                     setIsPending(false)
                     setError(null);
