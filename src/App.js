@@ -39,6 +39,9 @@ function App() {
                 {user && <Create />}
                 {!user && <Redirect to='login' />}
               </Route>
+              <Route path="*">
+                    <Redirect to="/" />
+              </Route>
             </Switch>
           </div>
         </BrowserRouter>
