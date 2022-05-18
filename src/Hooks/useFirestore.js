@@ -26,8 +26,7 @@ export const firestoreReducer = (state, action) => {
 export const useFirestore = (collection) => {
   const [response, dispatch] = useReducer(firestoreReducer, initialState);
   const [isCancled, setIsCancled] = useState(false);
-  const ref = db.getCollection(collection);
-
+  const ref =  db.collection(collection);
   const dispatchIfNotCancled = (action) => {
     if (!isCancled) {
       dispatch(action);
